@@ -26,10 +26,10 @@ public class GraphicManager : MonoBehaviour {
     public TextMeshProUGUI entrophy_production_t;
     public TextMeshProUGUI entrophy_t;
 
-    private const int coffee_limit = 1000;
     public GameObject coffee_obj;
-    private GameObject[] coffee_bucket = new GameObject[1000];
+    private GameObject[] coffee_bucket = new GameObject[100];
     private int cur_coffee_num = 0;
+    public int cur_coffee_num_ { get; set; }
 
     private Dictionary<GameObject, bool> glowings;
     private Dictionary<GameObject, Vector3> movings;
@@ -258,13 +258,15 @@ public class GraphicManager : MonoBehaviour {
         countings_add(counters[0], (int)GameManager.gm.year_counter);
         countings_add(counters[1], (int)GameManager.gm.season_counter);
         countings_add(counters[2], (int)GameManager.gm.coffee_counter);
-        slidings_add(sliders[0].GetComponent<Image>(), GameManager.gm.counters_change[0]);
-        slidings_add(sliders[1].GetComponent<Image>(), GameManager.gm.counters_change[1]);
+        if(GameManager.gm.counters_change[0] != 0f)
+            slidings_add(sliders[0].GetComponent<Image>(), GameManager.gm.counters_change[0]);
+        if(GameManager.gm.counters_change[1] != 0f)
+            slidings_add(sliders[1].GetComponent<Image>(), GameManager.gm.counters_change[1]);
     }
 
     public void entrophy_use_update() {
         for (int i = 0; i < 3; i++) {
-            entrophy_uses3[i].text = (GameManager.gm.is_entrophy_use[i]) ? "O" : "X";
+            entrophy_uses3[i].text = GameManager.gm.entrophy_uses[i].ToString();
         }
     }
 
@@ -284,11 +286,12 @@ public class GraphicManager : MonoBehaviour {
 
     public IEnumerator coffee_update() {
         int temp_loop_num = (int)GameManager.gm.coffee_counter / 1000;
+        StartCoroutine(SoundManager.sm.coffee_towering(temp_loop_num - cur_coffee_num));
         for (; cur_coffee_num < temp_loop_num; cur_coffee_num++) {
             movings_add(coffee_bucket[cur_coffee_num],
                 coffee_bucket[cur_coffee_num].GetComponent<RectTransform>().localPosition - new Vector3(0f, 1000f, 0f)
                 );
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 
@@ -328,7 +331,7 @@ public class GraphicManager : MonoBehaviour {
         countings = new Dictionary<TextMeshProUGUI, int>();
         slidings = new Dictionary<Image, float>();
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             coffee_bucket[i] = Instantiate(coffee_obj, new Vector2(0f, 0f), Quaternion.Euler(0f, 0f, (float)Random.Range(0, 360)));
             coffee_bucket[i].transform.SetParent(coffee_side.transform);
             coffee_bucket[i].GetComponent<RectTransform>().localPosition = new Vector2(80f + i % 10 * 20, 620f + i / 10 * 30);

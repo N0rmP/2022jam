@@ -17,8 +17,13 @@ public class scene_button : MonoBehaviour
         acting = 1;
     }
 
+    public void quit() {
+        Application.Quit();
+    }
+
     public void FixedUpdate() {
         if (acting != -1) {
+            SoundManager.sm.back_fade_ = true;
             curtain.GetComponent<RectTransform>().localPosition = new Vector3(0f, 0f);
             curtain.GetComponent<Image>().color += new Color(0f, 0f, 0f, 0.05f);
 

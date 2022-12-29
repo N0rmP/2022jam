@@ -7,22 +7,25 @@ using TMPro;
 public class button : MonoBehaviour
 {
     public int code;
+    public bool is_plus;
 
     public void on_click() {
-        bool temp_bool = GameManager.gm.is_entrophy_use[code];
-        string temp_str = "E";
+        int temp_int = GameManager.gm.entrophy_uses[code];
+        //string temp_str = "E";
 
-        if (temp_bool || GameManager.gm.entrophy > 0) {
-            GameManager.gm.is_entrophy_use[code] = !GameManager.gm.is_entrophy_use[code];
-            if (temp_bool) {
-                temp_str = "X";
-                GameManager.gm.entrophy++;
-            } else {
-                temp_str = "O";
-                GameManager.gm.entrophy--;
-            }
-            GraphicManager.gr.entrophy_update(false);
-            transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = temp_str;
+        if (is_plus && (GameManager.gm.entrophy > 0) && (temp_int < 5)) {
+            GameManager.gm.entrophy--;
+            GameManager.gm.entrophy_uses[code]++;
+            finish((++temp_int).ToString());
+        } else if (!is_plus && (temp_int > 0)) {
+            GameManager.gm.entrophy++;
+            GameManager.gm.entrophy_uses[code]--;
+            finish((--temp_int).ToString());
         }
+    }
+
+    private void finish(string temp_str) {
+        GraphicManager.gr.entrophy_update(false);
+        GraphicManager.gr.entrophy_uses3[code].text = temp_str;
     }
 }
