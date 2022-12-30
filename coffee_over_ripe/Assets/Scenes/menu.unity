@@ -855,7 +855,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 43,800 Coffee
+  m_text: "Coffee \n87,600"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: edf0e8845061486459e66b3a72f1e064, type: 2}
   m_sharedMaterial: {fileID: 3373100679869997674, guid: edf0e8845061486459e66b3a72f1e064, type: 2}
